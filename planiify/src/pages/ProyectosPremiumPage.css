@@ -1,0 +1,10 @@
+.premium-header {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  }
+  
+  .premium-message {
+    margin-top: 1rem;
+    text-align: center;
+    color: #000;
+  }
+  

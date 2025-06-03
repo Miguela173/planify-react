@@ -1,0 +1,179 @@
+.page-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .main-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+    flex: 1;
+  }
+  
+  .dashboard-section {
+    margin-bottom: 2rem;
+  }
+  
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .dashboard-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  .dashboard-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dashboard-card h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+  }
+  
+  .dashboard-card p {
+    color: #6b7280;
+    margin: 0;
+  }
+  
+  .projects-section h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #1f2937;
+  }
+  
+  .table-container {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .projects-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .projects-table thead {
+    background-color: #f9fafb;
+  }
+  
+  .projects-table th {
+    padding: 0.75rem 1.5rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .projects-table td {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e5e7eb;
+  }
+  
+  .project-name {
+    font-weight: 500;
+    color: #1f2937;
+  }
+  
+  .no-projects {
+    text-align: center;
+    color: #6b7280;
+  }
+  
+  .priority-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  
+  .priority-alta {
+    background-color: #fef2f2;
+    color: #991b1b;
+  }
+  
+  .priority-media {
+    background-color: #fffbeb;
+    color: #92400e;
+  }
+  
+  .priority-baja {
+    background-color: #f0fdf4;
+    color: #166534;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .btn-view {
+    color: #4f46e5;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+  
+  .btn-view:hover {
+    color: #3730a3;
+  }
+  
+  .btn-edit {
+    color: #059669;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+  
+  .btn-edit:hover {
+    color: #047857;
+  }
+  
+  .btn-delete {
+    color: #dc2626;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+  
+  .btn-delete:hover {
+    color: #b91c1c;
+  }
+  
+  .add-project-section {
+    margin-top: 1.5rem;
+  }
+  
+  .btn-add-project {
+    background-color: #10b981;
+    color: white;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .btn-add-project:hover {
+    background-color: #059669;
+  }
+  
