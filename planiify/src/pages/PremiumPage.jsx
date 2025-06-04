@@ -101,8 +101,9 @@ const PremiumPage = () => {
             </div>
             <div className="add-project-section">
               <button onClick={handleNavigateToPremiumProjects} className="btn-add-premium-project">
-                Agregar Proyecto Premium
+                Agregar Proyecto
               </button>
+              <p className="no-limits-text">¡Sin límites!</p>
             </div>
           </section>
         </div>

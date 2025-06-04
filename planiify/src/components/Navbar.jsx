@@ -14,12 +14,7 @@ const Navbar = ({ isPremium = false }) => {
         <div className="navbar-content">
           <div className="navbar-logo">
             <Link to={isPremium ? "/premium" : "/"}>
-              <img className="logo-small" src="/placeholder.svg?height=80&width=100" alt="PLANIFY Logo" />
-            </Link>
-          </div>
-          <div className="navbar-center">
-            <Link to={isPremium ? "/premium" : "/"}>
-              <img className="logo-large" src="/placeholder.svg?height=160&width=200" alt="PLANIFY" />
+              <img className="logo-small" src="public\img\PLANify with rocco copy.png" alt="PLANIFY Logo" />
             </Link>
           </div>
           <div className="navbar-menu">

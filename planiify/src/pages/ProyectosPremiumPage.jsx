@@ -169,7 +169,7 @@ const ProyectosPremiumPage = () => {
               </div>
             </div>
 
-            <button type="submit" className="submit-button">
+            <button type="submit" className="submit-buttonpy">
               Agregar Proyecto
             </button>
           </form>

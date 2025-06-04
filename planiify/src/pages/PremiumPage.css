@@ -7,14 +7,14 @@
     display: inline-flex;
     align-items: center;
     padding: 0.5rem 1rem;
-    background: linear-gradient(to right, #fbbf24, #f59e0b);
+    background: linear-gradient(to right, #d0fb24, #e2f50b);
     color: #000;
     font-weight: bold;
     border-radius: 9999px;
   }
   
   .premium-card {
-    border-left: 4px solid #fbbf24;
+    border-left: 4px solid #d7fb24;
   }
   
   .premium-feature {
@@ -29,7 +29,7 @@
   }
   
   .btn-add-premium-project {
-    background: linear-gradient(to right, #fbbf24, #f59e0b);
+    background: linear-gradient(to right, #a8f906, #f5e20b);
     color: #000;
     font-weight: bold;
     padding: 0.5rem 1rem;
@@ -42,4 +42,11 @@
   .btn-add-premium-project:hover {
     background: linear-gradient(to right, #f59e0b, #d97706);
   }
-  
+
+  .no-limits-text {
+    font-size: 0.875rem; /* Tamaño de fuente pequeño */
+    color: #717171; /* Amarillo, haciendo alusión a los colores insignia */
+    text-align: center; /* Centra el texto debajo del botón */
+    margin-top: 0.5rem; /* Espaciado entre el botón y el texto */
+    font-weight: bold; /* Texto en negrita */
+  }

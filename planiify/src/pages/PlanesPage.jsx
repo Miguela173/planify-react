@@ -66,15 +66,15 @@ const PlanesPage = () => {
             </p>
             <ul className="features-list">
               <li>
-                <span className="checkmark">✓</span>
+                <span className="checkmarkc">✓</span>
                 Notificaciones sobre tareas.
               </li>
               <li>
-                <span className="checkmark">✓</span>
+                <span className="checkmarkc">✓</span>
                 Estadísticas detalladas.
               </li>
               <li>
-                <span className="checkmark">✓</span>
+                <span className="checkmarkc">✓</span>
                 Podrás agregar y gestionar hasta 5 proyectos.
               </li>
             </ul>
@@ -98,23 +98,23 @@ const PlanesPage = () => {
             </p>
             <ul className="features-list premium-features">
               <li>
-                <span className="checkmark premium-check">✓</span>
+                <span className="checkmarkp premium-check">✓</span>
                 Soporte técnico prioritario.
               </li>
               <li>
-                <span className="checkmark premium-check">✓</span>
+                <span className="checkmarkp premium-check">✓</span>
                 Sincronización en tiempo real.
               </li>
               <li>
-                <span className="checkmark premium-check">✓</span>
+                <span className="checkmarkp premium-check">✓</span>
                 Mayor almacenamiento.
               </li>
               <li>
-                <span className="checkmark premium-check">✓</span>
+                <span className="checkmarkp premium-check">✓</span>
                 Notificación sobre tareas y proyectos próximos a llegar a su fecha límite.
               </li>
               <li>
-                <span className="checkmark premium-check">✓</span>
+                <span className="checkmarkp premium-check">✓</span>
                 Puedes agregar y gestionar proyectos ilimitados.
               </li>
             </ul>

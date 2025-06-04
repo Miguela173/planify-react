@@ -48,7 +48,7 @@ function LoginPage() {
     <div className="login-page">
       {/* Logo arriba a la izquierda */}
       <div className="top-left-logo">
-        <img src="/img/PLANify with rocco.png" alt="PLANIFY" className="main-logo" />
+        <img src="public\img\PLANify with rocco white.png" alt="PLANIFY" className="main-logo" />
       </div>
       {/* Botones arriba a la derecha */}
       <div className="top-right-buttons">
@@ -122,7 +122,7 @@ function LoginPage() {
                     required
                   />
                 </div>
-                <button type="submit" className="submit-button">
+                <button type="submit" className="submit-buttonlg">
                   Iniciar Sesión
                 </button>
                 <div className="checkbox-group">
@@ -144,7 +144,7 @@ function LoginPage() {
                 <h2>Regístrate</h2>
               </div>
               <form onSubmit={handleRegister} className="login-form">
-                <div className="name-inputs">
+                <div className="input-group icon-input">
                   <input
                     type="text"
                     name="nombre"
@@ -164,6 +164,7 @@ function LoginPage() {
                     required
                   />
                 </div>
+                <div className="input-group icon-input">
                 <input
                   type="email"
                   name="email"
@@ -173,7 +174,9 @@ function LoginPage() {
                   className="form-input"
                   required
                 />
-                <input
+                </div>
+                <div className="input-group icon-input">
+                <input 
                   type="password"
                   name="password"
                   placeholder="Contraseña"
@@ -182,7 +185,8 @@ function LoginPage() {
                   className="form-input"
                   required
                 />
-                <button type="submit" className="submit-button">
+                </div>
+                <button type="submit" className="submit-buttonlg">
                   Registrarse
                 </button>
                 <div className="checkbox-group">

@@ -16,7 +16,7 @@ const ProyectosPage = () => {
     nombre: "",
     fechaInicio: "",
     fechaLimite: "",
-    importancia: "Alta",
+    importancia: "",
   })
   const [tareaData, setTareaData] = useState({
     nombre: "",
@@ -46,38 +46,51 @@ const ProyectosPage = () => {
   }
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-
-    // Verificar límite de proyectos (máximo 5 para plan estándar)
-    const userPlan = localStorage.getItem("userPlan") || "standard"
-    if (userPlan === "standard" && proyectos.length >= 5) {
-      setShowLimitModal(true)
-      return
-    }
+    e.preventDefault();
 
     const nuevoProyecto = {
-      ...formData,
+      nombre: formData.nombre,
+      importancia: formData.importancia,
+      fechaInicio: formData.fechaInicio,
+      fechaLimite: formData.fechaLimite,
       tareas: [],
-    }
+    };
 
-    const nuevosProyectos = [...proyectos, nuevoProyecto]
-    setProyectos(nuevosProyectos)
-    localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos))
+    const nuevosProyectos = [...proyectos, nuevoProyecto];
+    setProyectos(nuevosProyectos);
+    localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos));
 
+    // Guardar la fecha y la importancia en localStorage para el calendario
+    const fechasCalendario = JSON.parse(localStorage.getItem("fechasCalendario") || "[]");
+    fechasCalendario.push({
+      fecha: formData.fechaLimite,
+      importancia: formData.importancia,
+    });
+    localStorage.setItem("fechasCalendario", JSON.stringify(fechasCalendario));
+
+    // Limpiar el formulario
     setFormData({
       nombre: "",
       fechaInicio: "",
       fechaLimite: "",
-      importancia: "Alta",
-    })
+      importancia: "",
+    });
   }
 
-  const eliminarProyecto = (index) => {
-    const nuevosProyectos = proyectos.filter((_, i) => i !== index)
-    setProyectos(nuevosProyectos)
-    localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos))
-    setShowDeleteModal(false)
-  }
+  const handleDeleteProject = (index) => {
+    const nuevosProyectos = [...proyectos];
+    const proyectoEliminado = nuevosProyectos.splice(index, 1); // Eliminar el proyecto del estado
+
+    setProyectos(nuevosProyectos);
+    localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos));
+
+    // Eliminar la fecha del calendario asociada al proyecto eliminado
+    const fechasCalendario = JSON.parse(localStorage.getItem("fechasCalendario") || "[]");
+    const nuevasFechasCalendario = fechasCalendario.filter(
+      (fecha) => fecha.nombre !== proyectoEliminado[0].nombre
+    );
+    localStorage.setItem("fechasCalendario", JSON.stringify(nuevasFechasCalendario));
+  };
 
   const asignarTarea = (projectIndex) => {
     setSelectedProjectIndex(projectIndex)
@@ -104,6 +117,10 @@ const ProyectosPage = () => {
       setShowModal(false)
       setSelectedProjectIndex(null)
     }
+  }
+
+  const closeModal = () => {
+    setShowLimitModal(false)
   }
 
   const handleNavigateToPlans = () => {
@@ -149,6 +166,7 @@ const ProyectosPage = () => {
                   className="form-input"
                   required
                 >
+                  <option value="">Selecciona</option>
                   <option value="Alta">Alta</option>
                   <option value="Media">Media</option>
                   <option value="Baja">Baja</option>
@@ -168,7 +186,7 @@ const ProyectosPage = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="fechaLimite">Fecha Límite</label>
+                <label htmlFor="fechaLimite">Fecha de Vencimiento</label>
                 <input
                   type="date"
                   name="fechaLimite"
@@ -179,8 +197,7 @@ const ProyectosPage = () => {
                 />
               </div>
             </div>
-
-            <button type="submit" className="submit-button">
+            <button type="submit" className="submit-buttonpy">
               Agregar Proyecto
             </button>
           </form>
@@ -222,13 +239,7 @@ const ProyectosPage = () => {
                       <td className="actions">
                         <button className="btn-view">Ver</button>
                         <button className="btn-edit">Editar</button>
-                        <button
-                          onClick={() => {
-                            setSelectedProjectIndex(index)
-                            setShowDeleteModal(true)
-                          }}
-                          className="btn-delete"
-                        >
+                        <button onClick={() => handleDeleteProject(index)} className="btn-delete">
                           Eliminar
                         </button>
                       </td>
@@ -245,114 +256,111 @@ const ProyectosPage = () => {
             </table>
           </div>
         </section>
-      </main>
 
-      {/* Modal para asignar tarea */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Asignar Tarea</h2>
-            <form onSubmit={handleTareaSubmit}>
-              <div className="modal-form-group">
-                <label>Nombre de la tarea</label>
-                <input
-                  type="text"
-                  name="nombre"
-                  value={tareaData.nombre}
-                  onChange={handleTareaInputChange}
-                  className="modal-input"
-                  placeholder="Nombre de la tarea"
-                  required
-                />
-              </div>
-              <div className="modal-form-group">
-                <label>Asignado a</label>
-                <input
-                  type="text"
-                  name="asignado"
-                  value={tareaData.asignado}
-                  onChange={handleTareaInputChange}
-                  className="modal-input"
-                  placeholder="Asignado a"
-                  required
-                />
-              </div>
-              <div className="modal-form-group">
-                <label>Fecha límite</label>
-                <input
-                  type="date"
-                  name="fechaLimite"
-                  value={tareaData.fechaLimite}
-                  onChange={handleTareaInputChange}
-                  className="modal-input"
-                  required
-                />
-              </div>
-              <div className="modal-form-group">
-                <label>Estado</label>
-                <select
-                  name="estado"
-                  value={tareaData.estado}
-                  onChange={handleTareaInputChange}
-                  className="modal-input"
-                  required
-                >
-                  <option value="Pendiente">Pendiente</option>
-                  <option value="Completada">Completada</option>
-                </select>
-              </div>
+        {/* Modal para asignar tarea */}
+        {showModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h2>Asignar Tarea</h2>
+              <form onSubmit={handleTareaSubmit}>
+                <div className="modal-form-group">
+                  <label>Nombre de la tarea</label>
+                  <input
+                    type="text"
+                    name="nombre"
+                    value={tareaData.nombre}
+                    onChange={handleTareaInputChange}
+                    className="modal-input"
+                    placeholder="Nombre de la tarea"
+                    required
+                  />
+                </div>
+                <div className="modal-form-group">
+                  <label>Asignado a</label>
+                  <input
+                    type="text"
+                    name="asignado"
+                    value={tareaData.asignado}
+                    onChange={handleTareaInputChange}
+                    className="modal-input"
+                    placeholder="Asignado a"
+                    required
+                  />
+                </div>
+                <div className="modal-form-group">
+                  <label>Fecha límite</label>
+                  <input
+                    type="date"
+                    name="fechaLimite"
+                    value={tareaData.fechaLimite}
+                    onChange={handleTareaInputChange}
+                    className="modal-input"
+                    required
+                  />
+                </div>
+                <div className="modal-form-group">
+                  <label>Estado</label>
+                  <select
+                    name="estado"
+                    value={tareaData.estado}
+                    onChange={handleTareaInputChange}
+                    className="modal-input"
+                    required
+                  >
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Completada">Completada</option>
+                  </select>
+                </div>
+                <div className="modal-buttons">
+                  <button type="submit" className="btn-assign-modal">
+                    Asignar
+                  </button>
+                  <button type="button" onClick={() => setShowModal(false)} className="btn-cancel">
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Modal de límite de proyectos */}
+        {showLimitModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h2>Límite Alcanzado</h2>
+              <p>No puedes crear más de 3 proyectos en la versión base.</p>
+              <p>Actualiza tu plan para desbloquear más funcionalidades.</p>
+              <button onClick={handleNavigateToPlans} className="btn-upgrade">
+                Actualizar Plan
+              </button>
+              <button onClick={closeModal} className="btn-close">
+                Cerrar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Modal de confirmación de eliminación */}
+        {showDeleteModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3>¿Estás seguro de que deseas eliminar este proyecto?</h3>
               <div className="modal-buttons">
-                <button type="submit" className="btn-assign-modal">
-                  Asignar
+                <button
+                  onClick={() => selectedProjectIndex !== null && handleDeleteProject(selectedProjectIndex)}
+                  className="btn-confirm-delete"
+                >
+                  Confirmar
                 </button>
-                <button type="button" onClick={() => setShowModal(false)} className="btn-cancel">
+                <button onClick={() => setShowDeleteModal(false)} className="btn-cancel-delete">
                   Cancelar
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Modal de límite de proyectos */}
-      {showLimitModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>¡Límite de Proyectos Alcanzado!</h3>
-            <p>
-              Ya has alcanzado el límite máximo de 5 proyectos. <strong>Actualiza tu plan ahora</strong>
-            </p>
-            <div className="modal-buttons">
-              <button onClick={() => setShowLimitModal(false)} className="btn-cancel">
-                Cerrar
-              </button>
-              <button onClick={handleNavigateToPlans} className="btn-upgrade">
-                ¡Actualizar plan!
-              </button>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Modal de confirmación de eliminación */}
-      {showDeleteModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>¿Estás seguro de que deseas eliminar este proyecto?</h3>
-            <div className="modal-buttons">
-              <button
-                onClick={() => selectedProjectIndex !== null && eliminarProyecto(selectedProjectIndex)}
-                className="btn-confirm-delete"
-              >
-                Confirmar
-              </button>
-              <button onClick={() => setShowDeleteModal(false)} className="btn-cancel-delete">
-                Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+        )}
+      </main>
 
       <Footer />
     </div>

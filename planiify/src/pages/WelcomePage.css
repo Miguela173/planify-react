@@ -1,10 +1,14 @@
 .welcome-container {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #4ade80, #16a34a);
+    background-image: url('/img/registrarse.jpg'); /* Ruta de la imagen */
+    background-size: 120%; /* Aumenta el tamaño de la imagen de fondo */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    min-height: 100vh; /* Asegura que el fondo cubra toda la altura de la página */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    color: #fff; /* Texto en blanco para contraste */
     padding: 2rem;
   }
   
@@ -13,16 +17,23 @@
   }
   
   .premium-logo {
-    height: 6rem;
+    height: 4rem; /* Aumenta la altura de la imagen */
+    width: auto; /* Mantén la proporción */
+    transition: transform 0.3s ease; /* Agrega una transición suave */
+  }
+  
+  .premium-logo:hover {
+    transform: scale(1.1); /* Efecto de agrandamiento al pasar el mouse */
   }
   
   .welcome-text {
     text-align: center;
     margin-bottom: 2rem;
+    color: #000;
   }
   
   .welcome-message {
-    color: white;
+    color: rgb(2, 0, 0);
     font-size: 1.5rem;
     font-weight: bold;
     line-height: 1.5;
@@ -105,4 +116,3 @@
   .enjoy-button:hover {
     background: #374151;
   }
-  

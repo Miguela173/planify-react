@@ -1,10 +1,37 @@
-.premium-header {
-    background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  }
-  
-  .premium-message {
-    margin-top: 1rem;
-    text-align: center;
-    color: #000;
-  }
-  
+.priority-alta {
+  background-color: #FFD700; /* Cambia el color naranja a amarillo */
+  color: #000; /* Texto en negro para contraste */
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+}
+
+.priority-media {
+  background-color: #FFEB3B; /* Amarillo más claro */
+  color: #000; /* Texto en negro para contraste */
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+}
+
+.priority-baja {
+  background-color: #FFF9C4; /* Amarillo pastel */
+  color: #000; /* Texto en negro para contraste */
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+}
+
+.btn-submit {
+  background-color: #FFD700; /* Botón amarillo */
+  color: #000; /* Texto en negro */
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+  background-color: #FFC107; /* Amarillo más oscuro al pasar el mouse */
+}

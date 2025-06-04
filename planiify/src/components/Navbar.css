@@ -21,8 +21,13 @@
   }
   
   .logo-small {
-    height: 5rem;
-    width: auto;
+    width: 200px; /* Aumenta el ancho del logo */
+    height: auto; /* Mantén la proporción */
+    transition: transform 0.3s ease; /* Agrega una transición suave */
+  }
+  
+  .logo-small:hover {
+    transform: scale(1.2); /* Efecto de agrandamiento al pasar el mouse */
   }
   
   .navbar-center {
@@ -75,4 +80,3 @@
     background-color: #dc2626;
     color: white;
   }
-  

@@ -162,28 +162,28 @@
   }
   
   .priority-btn.media.active {
-    background-color: #fbbf24;
-    color: white;
+    background-color: #FFD700; /* Amarillo para media importancia */
+    color: black;
   }
   
   .priority-btn.media:hover {
-    background-color: #fbbf24;
+    background-color: #FFC700; /* Amarillo más oscuro al pasar el mouse */
     color: white;
   }
   
   .priority-btn.alta {
-    background-color: #fecaca;
+    background-color: #f40e0e;
     border-color: #ef4444;
     color: #991b1b;
   }
   
   .priority-btn.alta.active {
-    background-color: #ef4444;
+    background-color: #FF0000; /* Rojo para alta importancia */
     color: white;
   }
   
   .priority-btn.alta:hover {
-    background-color: #ef4444;
+    background-color: #CC0000; /* Rojo más oscuro al pasar el mouse */
     color: white;
   }
   
@@ -191,6 +191,16 @@
     background-color: #d1fae5;
     border-color: #10b981;
     color: #166534;
+  }
+  
+  .priority-btn.baja.active {
+    background-color: #00FF00; /* Verde para baja importancia */
+    color: black;
+  }
+  
+  .priority-btn.baja:hover {
+    background-color: #00CC00; /* Verde más oscuro al pasar el mouse */
+    color: white;
   }
   
   .priority-btn.entregado.active {
@@ -203,17 +213,19 @@
     color: white;
   }
   
-  .btn-save {
-    background-color: #10b981;
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 0.375rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
+  .priority-alta {
+    background-color: #FF0000; /* Rojo para alta importancia */
+    color: #FFF; /* Texto blanco */
   }
   
-  .btn-save:hover {
-    background-color: #059669;
+  .priority-media {
+    background-color: #FFD700; /* Amarillo para media importancia */
+    color: #000
   }
-  
+
+  .project-name {
+    font-size: 0.875rem; /* Tamaño de fuente pequeño */
+    font-weight: normal; /* Peso normal para el texto */
+    margin-top: 0.2rem; /* Espaciado entre el número del día y el nombre */
+    text-align: center; /* Centra el texto */
+    color: #000; }

@@ -23,7 +23,7 @@ const WelcomePage = () => {
     <div className="welcome-container">
       {/* Logo Planify */}
       <div className="welcome-logo">
-        <img src="/placeholder.svg?height=120&width=300" alt="PLANIFY PREMIUM" className="premium-logo" />
+        <img src="public\img\PLANify premiumm.png" alt="PLANIFY PREMIUM" className="premium-logo" />
       </div>
 
       {/* Contenedor de texto centrado */}
@@ -35,16 +35,9 @@ const WelcomePage = () => {
         </p>
       </div>
 
-      {/* Imagen decorativa */}
-      <div className="welcome-image">
-        <img src="/placeholder.svg?height=150&width=150" alt="ROCO" className="decorative-image" />
-      </div>
 
       {/* Tarjeta Premium */}
       <div className="premium-card">
-        <div className="card-logo">
-          <img src="/placeholder.svg?height=80&width=200" alt="Planify Premium" className="card-logo-img" />
-        </div>
         <p className="card-title">¡Ahora tendrás acceso exclusivo a estos beneficios!</p>
         <ul className="benefits-list">
           <li>
