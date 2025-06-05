@@ -106,3 +106,5 @@ const HomePage = () => {
 }
 
 export default HomePage
+
+localStorage.setItem("token", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbjJAZ21haWwuY29tIiwiaWF0IjoxNzQ5MDgxNjgzLCJleHAiOjE3NDkxNjgwODN9.IPKrUz3euTxdCVyqsmhXsRooxFcXVAoAgZn4ilrGb_I0TFIfn7j0S9_Soge2lsaS")

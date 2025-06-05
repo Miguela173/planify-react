@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
@@ -14,7 +14,32 @@ const PlanesPage = () => {
     expiryDate: "",
     cvv: "",
   })
+  const [planes, setPlanes] = useState([]) // Nuevo estado para los planes
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const fetchPlanes = async () => {
+      const token = localStorage.getItem("accessToken")
+      try {
+        const response = await fetch("http://localhost:8081/plans", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/json"
+          }
+        })
+        if (response.ok) {
+          const data = await response.json()
+          setPlanes(data || []) // Ajusta según la estructura de tu API
+        } else {
+          console.error("❌ Error al acceder al recurso:", response.status)
+        }
+      } catch (error) {
+        console.error("❌ Error en la petición:", error)
+      }
+    }
+    fetchPlanes()
+  }, [])
 
   const handlePlanSelection = (plan) => {
     setSelectedPlan(plan)
@@ -53,75 +78,39 @@ const PlanesPage = () => {
 
         {/* Pricing Cards */}
         <div className="pricing-container">
-          {/* Plan Estándar */}
-          <div className="pricing-card standard">
-            <h3>Estándar</h3>
-            <p className="price">
-              <span className="price-amount">10.000$ COP</span>
-              <span className="price-period">/Mes</span>
-            </p>
-            <p className="plan-description">
-              Mantente al tanto de tus proyectos, sin sorpresas. Con el Plan Estándar, recibirás notificaciones para
-              nunca perder el ritmo.
-            </p>
-            <ul className="features-list">
-              <li>
-                <span className="checkmarkc">✓</span>
-                Notificaciones sobre tareas.
-              </li>
-              <li>
-                <span className="checkmarkc">✓</span>
-                Estadísticas detalladas.
-              </li>
-              <li>
-                <span className="checkmarkc">✓</span>
-                Podrás agregar y gestionar hasta 5 proyectos.
-              </li>
-            </ul>
-            <button onClick={() => handlePlanSelection("standard")} className="plan-button standard-button">
-              ¡Adquiérelo ahora!
-            </button>
-          </div>
-
-          {/* Plan Premium */}
-          <div className="pricing-card premium">
-            <h3>Premium</h3>
-            <p className="price">
-              <span className="price-amount">15.000$ COP</span>
-              <span className="price-period">/Mes</span>
-            </p>
-            <p className="plan-description">
-              <strong>
-                Lleva tu productividad al siguiente nivel. Con el Plan Premium, obtén notificaciones exclusivas y acceso
-                prioritario para un control total de tus proyectos.
-              </strong>
-            </p>
-            <ul className="features-list premium-features">
-              <li>
-                <span className="checkmarkp premium-check">✓</span>
-                Soporte técnico prioritario.
-              </li>
-              <li>
-                <span className="checkmarkp premium-check">✓</span>
-                Sincronización en tiempo real.
-              </li>
-              <li>
-                <span className="checkmarkp premium-check">✓</span>
-                Mayor almacenamiento.
-              </li>
-              <li>
-                <span className="checkmarkp premium-check">✓</span>
-                Notificación sobre tareas y proyectos próximos a llegar a su fecha límite.
-              </li>
-              <li>
-                <span className="checkmarkp premium-check">✓</span>
-                Puedes agregar y gestionar proyectos ilimitados.
-              </li>
-            </ul>
-            <button onClick={() => handlePlanSelection("premium")} className="plan-button premium-button">
-              ¡Adquiérelo ahora!
-            </button>
-          </div>
+          {planes.length === 0 ? (
+            <p>Cargando planes...</p>
+          ) : (
+            planes.map((plan) => (
+              <div
+                key={plan.id}
+                className={`pricing-card ${plan.name.toLowerCase()}`}
+              >
+                <h3>{plan.nombre}</h3>
+                <p className="price">
+                  <span className="price-amount">{plan.price}</span>
+                  <span className="price-period">/Mes</span>
+                </p>
+                <p className="plan-description">{plan.description}</p>
+                <ul className="features-list">
+                  {plan.caracteristicas?.map((caracteristica, idx) => (
+                    <li key={idx}>
+                      <span className={plan.name === "Premium" ? "checkmarkp premium-check" : "checkmarkc"}>
+                        ✓
+                      </span>
+                      {caracteristica}
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  onClick={() => handlePlanSelection(plan.nombre.toLowerCase())}
+                  className={`plan-button ${plan.name.toLowerCase()}-button`}
+                >
+                  ¡Adquiérelo ahora!
+                </button>
+              </div>
+            ))
+          )}
         </div>
       </div>
 

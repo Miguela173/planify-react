@@ -22,33 +22,60 @@ function LoginPage() {
     })
   }
 
-  const handleLogin = (e) => {
+  // Validar login SOLO con usuario permitido
+  const handleLogin = async (e) => {
     e.preventDefault()
-    // Simulación de login
-    if (formData.username && formData.password) {
-      localStorage.setItem("isLoggedIn", "true")
-      navigate("/")
-    } else {
-      alert("Por favor completa todos los campos")
+
+    try {
+      const response = await fetch("http://localhost:8081/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "*/*"
+        },
+        body: JSON.stringify({
+          email: formData.username,
+          password: formData.password
+        })
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        const accessToken = data.accessToken
+        localStorage.setItem("accessToken", accessToken)
+        console.log("✅ Token guardado:", accessToken)
+        alert("¡Inicio de sesión exitoso!")
+        navigate("/")
+      } else {
+        console.error("❌ Error de login:", data)
+        alert("Usuario o contraseña incorrectos")
+      }
+    } catch (error) {
+      console.error("❌ Error en la petición:", error)
+      alert("Error de conexión con el servidor")
     }
   }
 
+  // El registro solo muestra alerta
   const handleRegister = (e) => {
     e.preventDefault()
-    // Simulación de registro
-    if (formData.nombre && formData.apellido && formData.email && formData.password) {
-      localStorage.setItem("isLoggedIn", "true")
-      navigate("/")
-    } else {
-      alert("Por favor completa todos los campos")
-    }
+    alert("Solo puedes iniciar sesión con el usuario admin o email admin2@gmail.com")
+    setIsLogin(true)
+    setFormData({
+      username: "",
+      password: "",
+      nombre: "",
+      apellido: "",
+      email: "",
+    })
   }
 
   return (
     <div className="login-page">
       {/* Logo arriba a la izquierda */}
       <div className="top-left-logo">
-        <img src="public\img\PLANify with rocco white.png" alt="PLANIFY" className="main-logo" />
+        <img src="public/img/PLANify with rocco white.png" alt="PLANIFY" className="main-logo" />
       </div>
       {/* Botones arriba a la derecha */}
       <div className="top-right-buttons">
@@ -67,11 +94,6 @@ function LoginPage() {
       </div>
       <div className="login-container">
         <div className="login-card">
-          {/* Navigation */}
-          <nav className="login-nav">
-           
-          </nav>
-
           {/* Login Form */}
           {isLogin ? (
             <div>
@@ -165,26 +187,26 @@ function LoginPage() {
                   />
                 </div>
                 <div className="input-group icon-input">
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Correo"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  required
-                />
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Correo"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="form-input"
+                    required
+                  />
                 </div>
                 <div className="input-group icon-input">
-                <input 
-                  type="password"
-                  name="password"
-                  placeholder="Contraseña"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  className="form-input"
-                  required
-                />
+                  <input 
+                    type="password"
+                    name="password"
+                    placeholder="Contraseña"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    className="form-input"
+                    required
+                  />
                 </div>
                 <button type="submit" className="submit-buttonlg">
                   Registrarse
