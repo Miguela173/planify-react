@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { FiEye } from "react-icons/fi";
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import "./ProyectosPremiumPage.css"
@@ -22,6 +23,28 @@ const ProyectosPremiumPage = () => {
     fechaLimite: "",
     estado: "Pendiente",
   })
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [detailProject, setDetailProject] = useState(null)
+  const [showEditProjectModal, setShowEditProjectModal] = useState(false)
+  const [editProjectData, setEditProjectData] = useState({
+    nombre: "",
+    importancia: "Alta",
+    fechaInicio: "",
+    fechaLimite: "",
+  })
+  const [editProjectIndex, setEditProjectIndex] = useState(null)
+  const [showEditTareaModal, setShowEditTareaModal] = useState(false)
+  const [editTareaData, setEditTareaData] = useState({
+    nombre: "",
+    asignado: "",
+    fechaLimite: "",
+    estado: "Pendiente",
+  })
+  const [editTareaProjectIdx, setEditTareaProjectIdx] = useState(null)
+  const [editTareaIdx, setEditTareaIdx] = useState(null)
+  // Nuevo estado para eliminar tarea
+  const [showDeleteTareaModal, setShowDeleteTareaModal] = useState(false)
+  const [deleteTareaInfo, setDeleteTareaInfo] = useState({ projectIdx: null, tareaIdx: null })
 
   useEffect(() => {
     const proyectosGuardados = JSON.parse(localStorage.getItem("proyectos") || "[]")
@@ -62,11 +85,29 @@ const ProyectosPremiumPage = () => {
     })
   }
 
+  // Eliminar proyecto
   const eliminarProyecto = (index) => {
     const nuevosProyectos = proyectos.filter((_, i) => i !== index)
     setProyectos(nuevosProyectos)
     localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos))
     setShowDeleteModal(false)
+  }
+
+  // Editar tarea
+  const editarTarea = (projectIdx, tareaIdx) => {
+    const tarea = proyectos[projectIdx].tareas[tareaIdx]
+    setEditTareaData({ ...tarea })
+    setEditTareaProjectIdx(projectIdx)
+    setEditTareaIdx(tareaIdx)
+    setShowEditTareaModal(true)
+  }
+
+  // Eliminar tarea
+  const eliminarTarea = (projectIdx, tareaIdx) => {
+    const nuevosProyectos = [...proyectos]
+    nuevosProyectos[projectIdx].tareas.splice(tareaIdx, 1)
+    setProyectos(nuevosProyectos)
+    localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos))
   }
 
   const asignarTarea = (projectIndex) => {
@@ -92,6 +133,54 @@ const ProyectosPremiumPage = () => {
         estado: "Pendiente",
       })
       setShowModal(false)
+      setSelectedProjectIndex(null)
+    }
+  }
+
+  // Handler para guardar edición de proyecto
+  const handleEditProjectSubmit = (e) => {
+    e.preventDefault()
+    if (editProjectIndex !== null) {
+      const nuevosProyectos = [...proyectos]
+      nuevosProyectos[editProjectIndex] = {
+        ...nuevosProyectos[editProjectIndex],
+        ...editProjectData,
+      }
+      setProyectos(nuevosProyectos)
+      localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos))
+      setShowEditProjectModal(false)
+      setEditProjectIndex(null)
+    }
+  }
+
+  // Handler para guardar edición de tarea
+  const handleEditTareaSubmit = (e) => {
+    e.preventDefault()
+    if (editTareaProjectIdx !== null && editTareaIdx !== null) {
+      const nuevosProyectos = [...proyectos]
+      nuevosProyectos[editTareaProjectIdx].tareas[editTareaIdx] = { ...editTareaData }
+      setProyectos(nuevosProyectos)
+      localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos))
+      setShowEditTareaModal(false)
+      setEditTareaProjectIdx(null)
+      setEditTareaIdx(null)
+    }
+  }
+
+  // Nuevo handler para confirmar eliminación de tarea
+  const confirmarEliminarTarea = () => {
+    if (deleteTareaInfo.projectIdx !== null && deleteTareaInfo.tareaIdx !== null) {
+      eliminarTarea(deleteTareaInfo.projectIdx, deleteTareaInfo.tareaIdx)
+      setShowDeleteTareaModal(false)
+      setDeleteTareaInfo({ projectIdx: null, tareaIdx: null })
+    }
+  }
+
+  // Handler para confirmar eliminación de proyecto
+  const confirmarEliminarProyecto = () => {
+    if (selectedProjectIndex !== null) {
+      eliminarProyecto(selectedProjectIndex)
+      setShowDeleteModal(false)
       setSelectedProjectIndex(null)
     }
   }
@@ -185,7 +274,7 @@ const ProyectosPremiumPage = () => {
                   <th>Fecha de Inicio</th>
                   <th>Fecha Límite</th>
                   <th>Importancia</th>
-                  <th>Acciones</th>
+                  <th className="actions">Acciones</th>
                   <th>Tareas</th>
                   <th>Asignar Tarea</th>
                 </tr>
@@ -197,7 +286,7 @@ const ProyectosPremiumPage = () => {
                       No hay proyectos registrados
                     </td>
                   </tr>
-                ) : (
+                ) : 
                   proyectos.map((proyecto, index) => (
                     <tr key={index}>
                       <td>{proyecto.nombre}</td>
@@ -209,19 +298,108 @@ const ProyectosPremiumPage = () => {
                         </span>
                       </td>
                       <td className="actions">
-                        <button className="btn-view">Ver</button>
-                        <button className="btn-edit">Editar</button>
                         <button
+                          className="btn-edit-task"
+                          title="Editar proyecto"
+                          onClick={() => {
+                            setEditProjectData({
+                              nombre: proyecto.nombre,
+                              importancia: proyecto.importancia,
+                              fechaInicio: proyecto.fechaInicio,
+                              fechaLimite: proyecto.fechaLimite,
+                            })
+                            setEditProjectIndex(index)
+                            setShowEditProjectModal(true)
+                          }}
+                          style={{ background: "none", border: "none", cursor: "pointer", verticalAlign: "middle" }}
+                        >
+                          ✏️
+                        </button>
+                        <button
+                          className="btn-delete-task"
+                          title="Eliminar proyecto"
                           onClick={() => {
                             setSelectedProjectIndex(index)
                             setShowDeleteModal(true)
                           }}
-                          className="btn-delete"
+                          style={{ background: "none", border: "none", cursor: "pointer", verticalAlign: "middle", marginLeft: 4 }}
                         >
-                          Eliminar
+                          🗑️
+                        </button>
+                        <button
+                          className="btn-view"
+                          title="Ver proyecto"
+                          onClick={() => {
+                            setDetailProject(proyecto)
+                            setShowDetailModal(true)
+                          }}
+                          style={{ background: "none", border: "none", cursor: "pointer", verticalAlign: "middle", marginLeft: 4 }}
+                        >
+                          👁️
                         </button>
                       </td>
-                      <td>{proyecto.tareas?.length || 0} tareas</td>
+                      <td>
+                        {proyecto.tareas && proyecto.tareas.length > 0 ? (
+                          <ul style={{ margin: 0, paddingLeft: 16 }}>
+                            {proyecto.tareas.map((tarea, idx) => (
+                              <li key={idx} style={{ fontSize: "0.95em", marginBottom: 8 }}>
+                                <strong>{tarea.descripcion || tarea.nombre}</strong><br />
+                                <span>Asignado a: {tarea.asignado}</span><br />
+                                <span>Fecha límite: {tarea.fechaLimite}</span><br />
+                                <span>Estado: {tarea.estado}</span>
+                                <div style={{ marginTop: 4 }}>
+                                  <button
+                                    style={{ marginRight: 8 }}
+                                    className="btn-delete-task"
+                                    onClick={() => {
+                                      setShowDeleteTareaModal(true)
+                                      setDeleteTareaInfo({ projectIdx: index, tareaIdx: idx })
+                                    }}
+                                  >
+                                    Eliminar
+                                  </button>
+                                  <button
+                                    className="btn-edit-task"
+                                    title="Editar tarea"
+                                    style={{ background: "none", border: "none", cursor: "pointer", verticalAlign: "middle", marginRight: 8 }}
+                                    onClick={() => editarTarea(index, idx)}
+                                  >
+                                    ✏️
+                                  </button>
+                                  {tarea.estado === "Pendiente" && (
+                                    <button
+                                      className="btn-complete-task"
+                                      title="Completar tarea"
+                                      style={{
+                                        background: "none",
+                                        border: "none",
+                                        color: "#10b981",
+                                        fontWeight: "bold",
+                                        cursor: "pointer",
+                                        padding: "0.2rem 0.6rem",
+                                        borderRadius: "0.3rem",
+                                        marginRight: "0.3rem",
+                                        verticalAlign: "middle",
+                                        transition: "color 0.2s, transform 0.2s, background 0.2s"
+                                      }}
+                                      onClick={() => {
+                                        const nuevosProyectos = [...proyectos];
+                                        nuevosProyectos[index].tareas[idx].estado = "Completada";
+                                        setProyectos(nuevosProyectos);
+                                        localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos));
+                                      }}
+                                    >
+                                      Completar
+                                    </button>
+                                  )}
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span style={{ color: "#888" }}>Sin tareas</span>
+                        )}
+                      </td>
                       <td>
                         <button onClick={() => asignarTarea(index)} className="btn-assign">
                           Asignar
@@ -229,12 +407,122 @@ const ProyectosPremiumPage = () => {
                       </td>
                     </tr>
                   ))
-                )}
+                }
               </tbody>
             </table>
           </div>
         </section>
       </main>
+
+      {/* Modal de detalle del proyecto */}
+      {showDetailModal && detailProject && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ maxWidth: 500 }}>
+            <h2>Detalle del Proyecto</h2>
+            <div style={{ marginBottom: 16 }}>
+              <strong>Nombre:</strong> {detailProject.nombre}<br />
+              <strong>Importancia:</strong> {detailProject.importancia}<br />
+              <strong>Fecha de Inicio:</strong> {detailProject.fechaInicio}<br />
+              <strong>Fecha Límite:</strong> {detailProject.fechaLimite}<br />
+            </div>
+            <div>
+              <strong>Tareas:</strong>
+              {detailProject.tareas && detailProject.tareas.length > 0 ? (
+                <ul style={{ margin: 0, paddingLeft: 16 }}>
+                  {detailProject.tareas.map((tarea, idx) => (
+                    <li key={idx} style={{ marginBottom: 8 }}>
+                      <strong>{tarea.descripcion || tarea.nombre}</strong><br />
+                      <span>Asignado a: {tarea.asignado}</span><br />
+                      <span>Fecha límite: {tarea.fechaLimite}</span><br />
+                      <span>Estado: {tarea.estado}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <span style={{ color: "#888" }}>Sin tareas</span>
+              )}
+            </div>
+            <div className="modal-buttons" style={{ marginTop: 20 }}>
+              <button
+                className="btn-cancel"
+                onClick={() => setShowDetailModal(false)}
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para editar proyecto */}
+      {showEditProjectModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Editar Proyecto</h2>
+            <form onSubmit={handleEditProjectSubmit}>
+              <div className="modal-form-group">
+                <label>Nombre del Proyecto</label>
+                <input
+                  type="text"
+                  name="nombre"
+                  value={editProjectData.nombre}
+                  onChange={e => setEditProjectData({ ...editProjectData, nombre: e.target.value })}
+                  className="modal-input"
+                  required
+                />
+              </div>
+              <div className="modal-form-group">
+                <label>Importancia</label>
+                <select
+                  name="importancia"
+                  value={editProjectData.importancia}
+                  onChange={e => setEditProjectData({ ...editProjectData, importancia: e.target.value })}
+                  className="modal-input"
+                  required
+                >
+                  <option value="Alta">Alta</option>
+                  <option value="Media">Media</option>
+                  <option value="Baja">Baja</option>
+                </select>
+              </div>
+              <div className="modal-form-group">
+                <label>Fecha de Inicio</label>
+                <input
+                  type="date"
+                  name="fechaInicio"
+                  value={editProjectData.fechaInicio}
+                  onChange={e => setEditProjectData({ ...editProjectData, fechaInicio: e.target.value })}
+                  className="modal-input"
+                  required
+                />
+              </div>
+              <div className="modal-form-group">
+                <label>Fecha Límite</label>
+                <input
+                  type="date"
+                  name="fechaLimite"
+                  value={editProjectData.fechaLimite}
+                  onChange={e => setEditProjectData({ ...editProjectData, fechaLimite: e.target.value })}
+                  className="modal-input"
+                  required
+                />
+              </div>
+              <div className="modal-buttons">
+                <button type="submit" className="btn-assign-modal">
+                  Guardar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowEditProjectModal(false)}
+                  className="btn-cancel"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Modal para asignar tarea */}
       {showModal && (
@@ -310,12 +598,113 @@ const ProyectosPremiumPage = () => {
             <h3>¿Estás seguro de que deseas eliminar este proyecto?</h3>
             <div className="modal-buttons">
               <button
-                onClick={() => selectedProjectIndex !== null && eliminarProyecto(selectedProjectIndex)}
+                onClick={confirmarEliminarProyecto}
                 className="btn-confirm-delete"
               >
                 Confirmar
               </button>
-              <button onClick={() => setShowDeleteModal(false)} className="btn-cancel-delete">
+              <button
+                onClick={() => {
+                  setShowDeleteModal(false)
+                  setSelectedProjectIndex(null)
+                }}
+                className="btn-cancel-delete"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para editar tarea */}
+      {showEditTareaModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Editar Tarea</h2>
+            <form onSubmit={handleEditTareaSubmit}>
+              <div className="modal-form-group">
+                <label>Nombre de la tarea</label>
+                <input
+                  type="text"
+                  name="nombre"
+                  value={editTareaData.nombre}
+                  onChange={e => setEditTareaData({ ...editTareaData, nombre: e.target.value })}
+                  className="modal-input"
+                  required
+                />
+              </div>
+              <div className="modal-form-group">
+                <label>Asignado a</label>
+                <input
+                  type="text"
+                  name="asignado"
+                  value={editTareaData.asignado}
+                  onChange={e => setEditTareaData({ ...editTareaData, asignado: e.target.value })}
+                  className="modal-input"
+                  required
+                />
+              </div>
+              <div className="modal-form-group">
+                <label>Fecha límite</label>
+                <input
+                  type="date"
+                  name="fechaLimite"
+                  value={editTareaData.fechaLimite}
+                  onChange={e => setEditTareaData({ ...editTareaData, fechaLimite: e.target.value })}
+                  className="modal-input"
+                  required
+                />
+              </div>
+              <div className="modal-form-group">
+                <label>Estado</label>
+                <select
+                  name="estado"
+                  value={editTareaData.estado}
+                  onChange={e => setEditTareaData({ ...editTareaData, estado: e.target.value })}
+                  className="modal-input"
+                  required
+                >
+                  <option value="Pendiente">Pendiente</option>
+                  <option value="Completada">Completada</option>
+                </select>
+              </div>
+              <div className="modal-buttons">
+                <button type="submit" className="btn-assign-modal">
+                  Guardar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowEditTareaModal(false)}
+                  className="btn-cancel"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de confirmación de eliminación de tarea */}
+      {showDeleteTareaModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>¿Estás seguro de que deseas eliminar esta tarea?</h3>
+            <div className="modal-buttons">
+              <button
+                onClick={confirmarEliminarTarea}
+                className="btn-confirm-delete"
+              >
+                Confirmar
+              </button>
+              <button
+                onClick={() => {
+                  setShowDeleteTareaModal(false)
+                  setDeleteTareaInfo({ projectIdx: null, tareaIdx: null })
+                }}
+                className="btn-cancel-delete"
+              >
                 Cancelar
               </button>
             </div>

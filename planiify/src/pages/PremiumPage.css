@@ -50,3 +50,74 @@
     margin-top: 0.5rem; /* Espaciado entre el botón y el texto */
     font-weight: bold; /* Texto en negrita */
   }
+
+  .actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  min-width: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.actions .btn-view {
+  color: #1976d2;
+  background: none;
+  border: none;
+  padding: 0.1rem 0.6rem;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1em;
+  border-radius: 0.3rem;
+  transition: background 0.2s, color 0.2s;
+  width: auto;
+  height: auto;
+  line-height: 1.2;
+  margin: 0;
+  display: inline-block;
+  text-align: center;
+}
+
+  .actions .btn-edit {
+    color: #10b981;
+  }
+
+  .actions .btn-delete {
+    background: #dc2626;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.3rem 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .actions .btn-delete:hover {
+    background: #a30000;
+    transform: scale(1.05);
+  }
+
+  .projects-table th,
+  .projects-table td {
+    padding: 0.7rem 1.2rem; /* Espacio moderado */
+    min-width: 80px;        /* Ancho mínimo más pequeño */
+    text-align: left;
+    font-size: 1.05em;
+  }
+
+  .projects-table th:nth-child(4),
+  .projects-table td:nth-child(4) {
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .projects-table th:nth-child(5),
+  .projects-table td:nth-child(5) {
+    text-align: center;
+    vertical-align: middle;
+    padding: 0.2rem 0.4rem;
+  }

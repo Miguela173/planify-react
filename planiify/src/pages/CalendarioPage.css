@@ -228,4 +228,25 @@
     font-weight: normal; /* Peso normal para el texto */
     margin-top: 0.2rem; /* Espaciado entre el número del día y el nombre */
     text-align: center; /* Centra el texto */
-    color: #000; }
+    color: #000;
+  }
+  
+  .calendar-project-badge.priority-media {
+    background: #ffe066 !important;
+    color: #222 !important;
+  }
+  .calendar-project-badge.priority-baja {
+    background: #b9fbc0 !important;
+    color: #222 !important;
+  }
+  .calendar-project-badge.priority-alta {
+    background: #ff6b6b !important;
+    color: #fff !important;
+  }
+
+  /* Puedes agregarlo a CalendarioPage.css */
+.calendar-day.clickable:hover {
+  outline: 2px solid #ffd700;
+  box-shadow: 0 0 0 2px #ffd70033;
+  transition: outline 0.2s;
+}

@@ -127,7 +127,9 @@
   
   .actions {
     display: flex;
-    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    /* gap: 0.5rem;  Puedes quitar esto si solo hay un botón */
   }
   
   .btn-view {
@@ -186,3 +188,20 @@
     background-color: #2563eb; /* Cambia el color al pasar el mouse */
     color: white;
   }
+  
+  /* Puedes agregar esto en src/pages/HomePage.css */
+.btn-go-project {
+  background-color: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-go-project:hover {
+  background-color: #2563eb;
+}

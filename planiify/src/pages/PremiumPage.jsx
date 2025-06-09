@@ -68,12 +68,13 @@ const PremiumPage = () => {
                     <th>Fecha de Vencimiento</th>
                     <th>Importancia</th>
                     <th>Acciones</th>
+                    <th>Tareas</th>
                   </tr>
                 </thead>
                 <tbody>
                   {proyectos.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="no-projects">
+                      <td colSpan={6} className="no-projects">
                         No hay proyectos registrados
                       </td>
                     </tr>
@@ -89,9 +90,17 @@ const PremiumPage = () => {
                           </span>
                         </td>
                         <td className="actions">
-                          <button className="btn-view">Ver</button>
-                          <button className="btn-edit">Editar</button>
-                          <button className="btn-delete">Eliminar</button>
+                          <button
+                            className="btn-view"
+                            onClick={() => navigate("/proyectos-premium")}
+                          >
+                            Ver proyecto
+                          </button>
+                        </td>
+                        <td>
+                          {proyecto.tareas && proyecto.tareas.length > 0
+                            ? `${proyecto.tareas.length} tareas agregadas`
+                            : "Sin tareas"}
                         </td>
                       </tr>
                     ))

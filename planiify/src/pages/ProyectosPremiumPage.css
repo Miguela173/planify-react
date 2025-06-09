@@ -35,3 +35,147 @@
 .btn-submit:hover {
   background-color: #FFC107; /* Amarillo más oscuro al pasar el mouse */
 }
+
+.btn-delete:hover {
+  color: #dc2626;
+  transform: scale(1.2);
+  transition: transform 0.2s;
+}
+
+/* Centra el texto y los botones de la columna ACCIONES */
+.projects-table th.actions,
+.projects-table td.actions {
+  min-width: 110px;
+  width: 110px;
+  white-space: nowrap;
+  padding: 0 !important;
+  margin: 0 !important;
+  text-align: center;
+  vertical-align: middle;
+  height: auto;
+  line-height: 1.1;
+}
+
+/* Centra el texto del encabezado ACCIONES vertical y horizontalmente */
+.projects-table th.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px; /* Ajusta según el alto de tus filas */
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Centra los botones dentro de la celda de acciones */
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2rem;
+  width: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 100%;
+}
+
+.projects-table th,
+.projects-table td {
+  vertical-align: middle;
+  text-align: center;
+  padding: 0.2rem 0.5rem; /* Reduce el padding vertical */
+}
+
+.btn-delete:hover,
+.btn-edit:hover,
+.btn-view:hover {
+  transform: scale(1.2);
+  transition: transform 0.2s;
+}
+
+.btn-delete:hover {
+  color: #dc2626;
+}
+
+.btn-edit:hover {
+  color: #f59e42;
+}
+
+.btn-view {
+  color: #1976d2;
+  transition: color 0.2s;
+}
+
+.btn-view:hover {
+  color: #125ea2;
+  background: #e3f2fd;
+  border-radius: 4px;
+}
+
+/* Botón asignar tarea */
+.btn-assign {
+  background-color: #ffd700;
+  color: #222;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.4rem 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.btn-assign:hover {
+  background-color: #ffc107;
+  color: #000;
+  transform: scale(1.08);
+}
+
+/* Botón eliminar tarea */
+.btn-delete-task {
+  background: none;
+  border: none;
+  color: #dc2626;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.3rem;
+  transition: color 0.2s, transform 0.2s, background 0.2s;
+}
+.btn-delete-task:hover {
+  background: #ffeaea;
+  color: #a30000;
+  transform: scale(1.15);
+}
+
+/* Botón completar tarea */
+.btn-complete-task {
+  background: none;
+  border: none;
+  color: #10b981;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.3rem;
+  margin-right: 0.3rem;
+  transition: color 0.2s, transform 0.2s, background 0.2s;
+}
+.btn-complete-task:hover {
+  background: #e6f9f3;
+  color: #059669;
+  transform: scale(1.15);
+}
+
+/* Botón editar tarea */
+.btn-edit-task {
+  background: none;
+  border: none;
+  color: #f59e42;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.3rem;
+  transition: color 0.2s, transform 0.2s, background 0.2s;
+}
+.btn-edit-task:hover {
+  background: #fff4e6;
+  color: #c97a13;
+  transform: scale(1.15);
+}
