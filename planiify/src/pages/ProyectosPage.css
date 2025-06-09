@@ -105,6 +105,7 @@
     padding: 0.5rem;
     border: 1px solid #e5e7eb;
     text-align: left;
+    vertical-align: middle;
   }
   
   .projects-table th {
@@ -145,8 +146,11 @@
   
   .actions {
     display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 0.5rem;
-    flex-wrap: wrap;
+    min-width: 110px; /* Ajusta según el tamaño de tus íconos */
+    padding: 0.3rem 0;
   }
   
   .btn-view {

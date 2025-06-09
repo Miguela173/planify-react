@@ -8,16 +8,45 @@ import "./PremiumPage.css"
 
 const PremiumPage = () => {
   const [totalProyectos, setTotalProyectos] = useState(0)
-  const [totalTareas, setTotalTareas] = useState(5)
-  const [fechasProximas, setFechasProximas] = useState(3)
+  const [totalTareas, setTotalTareas] = useState(0)
+  const [fechasProximas, setFechasProximas] = useState(0)
   const [proyectos, setProyectos] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => {
     // Cargar proyectos desde localStorage
-    const proyectosGuardados = JSON.parse(localStorage.getItem("proyectos") || "[]")
-    setProyectos(proyectosGuardados)
-    setTotalProyectos(proyectosGuardados.length)
+    const proyectosGuardados = JSON.parse(localStorage.getItem("proyectos") || "[]");
+    setProyectos(proyectosGuardados);
+    setTotalProyectos(proyectosGuardados.length);
+
+    // Calcular tareas pendientes
+    const pendientes = proyectosGuardados.reduce((acc, proyecto) => {
+      if (proyecto.tareas && Array.isArray(proyecto.tareas)) {
+        return acc + proyecto.tareas.filter(t => t.estado === "Pendiente").length;
+      }
+      return acc;
+    }, 0);
+    setTotalTareas(pendientes);
+
+    // Calcular tareas con fechas próximas (próximos 3 días)
+    const hoy = new Date();
+    const tresDiasDespues = new Date();
+    tresDiasDespues.setDate(hoy.getDate() + 3);
+
+    let proximas = 0;
+    proyectosGuardados.forEach(proyecto => {
+      if (proyecto.tareas && Array.isArray(proyecto.tareas)) {
+        proyecto.tareas.forEach(tarea => {
+          if (tarea.estado === "Pendiente" && tarea.fechaLimite) {
+            const fechaLimite = new Date(tarea.fechaLimite);
+            if (fechaLimite >= hoy && fechaLimite <= tresDiasDespues) {
+              proximas++;
+            }
+          }
+        });
+      }
+    });
+    setFechasProximas(proximas);
   }, [])
 
   const handleNavigateToPremiumProjects = () => {
@@ -61,14 +90,14 @@ const PremiumPage = () => {
             <h2>Lista de Proyectos Premium</h2>
             <div className="table-container">
               <table className="projects-table">
-                <thead className="premium-table-header">
+                <thead>
                   <tr>
                     <th>Nombre del Proyecto</th>
                     <th>Fecha de Inicio</th>
                     <th>Fecha de Vencimiento</th>
                     <th>Importancia</th>
-                    <th>Acciones</th>
                     <th>Tareas</th>
+                    <th>Acciones</th> {/* Nueva columna */}
                   </tr>
                 </thead>
                 <tbody>
@@ -89,18 +118,19 @@ const PremiumPage = () => {
                             {proyecto.importancia}
                           </span>
                         </td>
-                        <td className="actions">
-                          <button
-                            className="btn-view"
-                            onClick={() => navigate("/proyectos-premium")}
-                          >
-                            Ver proyecto
-                          </button>
+                        <td>
+                          {proyecto.tareas ? proyecto.tareas.length : 0}
                         </td>
                         <td>
-                          {proyecto.tareas && proyecto.tareas.length > 0
-                            ? `${proyecto.tareas.length} tareas agregadas`
-                            : "Sin tareas"}
+                          <div className="actions">
+                            <button
+                              className="btn-view"
+                              title="Ver Proyecto"
+                              onClick={() => navigate("/proyectos-premium")}
+                            >
+                              Ver Proyecto👁️
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))

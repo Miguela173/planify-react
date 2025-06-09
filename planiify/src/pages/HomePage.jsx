@@ -171,7 +171,7 @@ const HomePage = () => {
                     <th>Nombre del Proyecto</th>
                     <th>Fecha de Inicio</th>
                     <th>Fecha de Vencimiento</th>
-                    <th>Importancia</th>
+                    <th>Tareas</th> {/* Cambiado de Importancia a Tareas */}
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -189,16 +189,18 @@ const HomePage = () => {
                         <td>{proyecto.fechaInicio}</td>
                         <td>{proyecto.fechaLimite}</td>
                         <td>
-                          <span className={`priority-badge priority-${proyecto.importancia.toLowerCase()}`}>
-                            {proyecto.importancia}
-                          </span>
+                          {/* Mostrar número de tareas asignadas */}
+                          {proyecto.tareas ? proyecto.tareas.length : 0}
                         </td>
-                        <td className="actions">
+                        <td>
                           <button
-                            className="btn-go-project"
-                            onClick={() => navigate(`/proyectos?proyecto=${encodeURIComponent(proyecto.nombre)}`)}
+                            className="action-btn view-btn"
+                            title="Ver Proyecto"
+                            onClick={() => {
+                              navigate("/proyectos")
+                            }}
                           >
-                            Ir a proyecto
+                            Ver Proyecto👁️
                           </button>
                         </td>
                       </tr>

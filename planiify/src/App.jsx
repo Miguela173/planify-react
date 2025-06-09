@@ -22,6 +22,7 @@ function App() {
           <Route path="/welcome" element={<WelcomePage />} />
           <Route path="/proyectos-premium" element={<ProyectosPremiumPage />} />
           <Route path="/premium" element={<PremiumPage />} />
+          {/* <Route path="/calendario-premium" element={<CalendarioPremium />} /> */}
         </Routes>
       </div>
     </Router>

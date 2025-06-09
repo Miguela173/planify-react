@@ -66,16 +66,17 @@ const ProyectosPremiumPage = () => {
   }
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const nuevoProyecto = {
       ...formData,
       tareas: [],
-    }
+      premium: true, // <--- Marca el proyecto como premium
+    };
 
-    const nuevosProyectos = [...proyectos, nuevoProyecto]
-    setProyectos(nuevosProyectos)
-    localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos))
+    const nuevosProyectos = [...proyectos, nuevoProyecto];
+    setProyectos(nuevosProyectos);
+    localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos));
 
     setFormData({
       nombre: "",
@@ -274,7 +275,7 @@ const ProyectosPremiumPage = () => {
                   <th>Fecha de Inicio</th>
                   <th>Fecha Límite</th>
                   <th>Importancia</th>
-                  <th className="actions">Acciones</th>
+                  <th>Acciones</th>
                   <th>Tareas</th>
                   <th>Asignar Tarea</th>
                 </tr>
@@ -282,7 +283,7 @@ const ProyectosPremiumPage = () => {
               <tbody>
                 {proyectos.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="no-projects">
+                    <td colSpan={8} className="no-projects">
                       No hay proyectos registrados
                     </td>
                   </tr>
@@ -297,45 +298,68 @@ const ProyectosPremiumPage = () => {
                           {proyecto.importancia}
                         </span>
                       </td>
-                      <td className="actions">
+                      <td>
+                        {/* Botón Ver */}
                         <button
-                          className="btn-edit-task"
-                          title="Editar proyecto"
+                          className="btn-view"
+                          title="Ver detalles"
+                          style={{
+                            border: "none",
+                            borderRadius: "4px",
+                            padding: "4px 10px",
+                            marginRight: "6px",
+                            cursor: "pointer",
+                            fontWeight: "bold"
+                          }}
+                          onClick={() => {
+                            setDetailProject(proyecto);
+                            setShowDetailModal(true);
+                          }}
+                        >
+                          Ver
+                        </button>
+                        {/* Botón Editar */}
+                        <button
+                          className="btn-edit"
+                          title="Editar"
+                          style={{
+                            border: "none",
+                            borderRadius: "4px",
+                            padding: "4px 10px",
+                            marginRight: "6px",
+                            cursor: "pointer",
+                            fontWeight: "bold"
+                          }}
                           onClick={() => {
                             setEditProjectData({
                               nombre: proyecto.nombre,
                               importancia: proyecto.importancia,
                               fechaInicio: proyecto.fechaInicio,
                               fechaLimite: proyecto.fechaLimite,
-                            })
-                            setEditProjectIndex(index)
-                            setShowEditProjectModal(true)
+                            });
+                            setEditProjectIndex(index);
+                            setShowEditProjectModal(true);
                           }}
-                          style={{ background: "none", border: "none", cursor: "pointer", verticalAlign: "middle" }}
                         >
-                          ✏️
+                          Editar
                         </button>
+                        {/* Botón Eliminar */}
                         <button
-                          className="btn-delete-task"
-                          title="Eliminar proyecto"
-                          onClick={() => {
-                            setSelectedProjectIndex(index)
-                            setShowDeleteModal(true)
+                          className="btn-delete"
+                          title="Eliminar"
+                          style={{
+                            border: "none",
+                            borderRadius: "4px",
+                            padding: "4px 10px",
+                            cursor: "pointer",
+                            fontWeight: "bold"
                           }}
-                          style={{ background: "none", border: "none", cursor: "pointer", verticalAlign: "middle", marginLeft: 4 }}
-                        >
-                          🗑️
-                        </button>
-                        <button
-                          className="btn-view"
-                          title="Ver proyecto"
                           onClick={() => {
-                            setDetailProject(proyecto)
-                            setShowDetailModal(true)
+                            setShowDeleteModal(true);
+                            setSelectedProjectIndex(index);
                           }}
-                          style={{ background: "none", border: "none", cursor: "pointer", verticalAlign: "middle", marginLeft: 4 }}
                         >
-                          👁️
+                          Eliminar
                         </button>
                       </td>
                       <td>

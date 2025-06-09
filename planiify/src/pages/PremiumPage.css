@@ -51,15 +51,45 @@
     font-weight: bold; /* Texto en negrita */
   }
 
-  .actions {
+  /* Elimina o comenta todo lo relacionado con .actions */
+.actions {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+.actions button,
+.actions .btn-view,
+.actions .btn-edit,
+.actions .btn-delete {
+  background: #fff;
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px #0001;
+  width: 48px;
+  height: 48px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0;
-  min-width: 0;
+  font-size: 2rem;
+  margin: 0;
   padding: 0;
-  height: 100%;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.actions button:hover,
+.actions .btn-view:hover,
+.actions .btn-edit:hover,
+.actions .btn-delete:hover {
+  box-shadow: 0 4px 16px #0002;
+  transform: scale(1.05);
+  background: #f7f7f7;
 }
 
 .actions .btn-view {
@@ -80,26 +110,26 @@
   text-align: center;
 }
 
-  .actions .btn-edit {
-    color: #10b981;
-  }
+.actions .btn-edit {
+  color: #10b981;
+}
 
-  .actions .btn-delete {
-    background: #dc2626;
-    color: #fff;
-    border: none;
-    border-radius: 0.5rem;
-    padding: 0.3rem 0.9rem;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background 0.2s, transform 0.2s;
-  }
+.actions .btn-delete {
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.3rem 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background 0.2s, transform 0.2s;
+}
 
-  .actions .btn-delete:hover {
-    background: #a30000;
-    transform: scale(1.05);
-  }
+.actions .btn-delete:hover {
+  background: #a30000;
+  transform: scale(1.05);
+}
 
   .projects-table th,
   .projects-table td {
@@ -121,3 +151,36 @@
     vertical-align: middle;
     padding: 0.2rem 0.4rem;
   }
+
+  /* Aplica el degradado a toda la fila de encabezados */
+.projects-table thead tr {
+  background: linear-gradient(90deg, #a8e800 0%, #fff700 100%);
+}
+
+/* Quita el fondo individual de cada th */
+.projects-table th {
+  background: none;
+}
+
+/* Colores para la importancia de los proyectos */
+.priority-badge {
+  display: inline-block;
+  padding: 0.3em 0.9em;
+  border-radius: 1em;
+  font-weight: bold;
+  font-size: 0.95em;
+  text-align: center;
+  color: #fff;
+}
+
+.priority-alta {
+  background: #dc2626; /* Rojo fuerte */
+}
+
+.priority-media {
+  background: #f59e0b; /* Naranja */
+}
+
+.priority-baja {
+  background: #10b981; /* Verde */
+}

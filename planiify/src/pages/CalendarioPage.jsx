@@ -83,12 +83,30 @@ const CalendarioPage = () => {
                       borderRadius: "6px",
                       background: esInicio ? "#e0f7fa" : undefined,
                       color: esInicio ? "#222" : undefined,
+                      display: "flex",
+                      alignItems: "center"
                     }}
                   >
                     {p.nombre}{" "}
                     <span style={{ fontWeight: "bold", fontSize: "0.8em" }}>
                       ({esInicio ? "Inicio" : "Vence"})
                     </span>
+                    {p.premium && (
+                      <span
+                        style={{
+                          marginLeft: 6,
+                          background: "#ffe600",
+                          color: "#222",
+                          borderRadius: "4px",
+                          padding: "1px 6px",
+                          fontSize: "0.7em",
+                          fontWeight: "bold",
+                          marginTop: "-2px"
+                        }}
+                      >
+                        PREMIUM
+                      </span>
+                    )}
                   </div>
                 )
               })}
@@ -178,7 +196,26 @@ const CalendarioPage = () => {
               <ul>
                 {proyectosDelModal.map((p, idx) => (
                   <li key={idx} style={{ marginBottom: 12 }}>
-                    <strong>{p.nombre}</strong> <br />
+                    <strong>
+                      {p.nombre}
+                      {p.premium && (
+                        <span
+                          style={{
+                            marginLeft: 6,
+                            background: "#ffe600",
+                            color: "#222",
+                            borderRadius: "4px",
+                            padding: "1px 6px",
+                            fontSize: "0.7em",
+                            fontWeight: "bold",
+                            marginTop: "-2px"
+                          }}
+                        >
+                          PREMIUM
+                        </span>
+                      )}
+                    </strong>
+                    <br />
                     <span>Importancia: {p.importancia}</span><br />
                     <span>Fecha de inicio: {p.fechaInicio}</span><br />
                     <span>Fecha límite: {p.fechaLimite}</span><br />

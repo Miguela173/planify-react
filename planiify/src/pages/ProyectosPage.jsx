@@ -271,57 +271,50 @@ const ProyectosPage = () => {
                       <td>{proyecto.fechaInicio}</td>
                       <td>{proyecto.fechaLimite}</td>
                       <td>
-                        <span className={`priority-badge priority-${proyecto.importancia.toLowerCase()}`}>
+                        <span className={`priority-badge priority-${proyecto.importancia?.toLowerCase()}`}>
                           {proyecto.importancia}
                         </span>
                       </td>
-                      <td className="actions">
-                        <button
-                          className="btn-view"
-                          title="Ver proyecto"
-                          style={{ background: "none", border: "none", cursor: "pointer", verticalAlign: "middle" }}
-                          onClick={() => {
-                            setDetailProject(proyecto);
-                            setShowDetailModal(true);
-                          }}
-                        >
-                          👁️
-                        </button>
-                        <button
-                          className="btn-edit-task"
-                          title="Editar proyecto"
-                          style={{ background: "none", border: "none", cursor: "pointer", verticalAlign: "middle", marginLeft: 4 }}
-                          onClick={() => {
-                            setEditProjectData({
-                              nombre: proyecto.nombre,
-                              importancia: proyecto.importancia,
-                              fechaInicio: proyecto.fechaInicio,
-                              fechaLimite: proyecto.fechaLimite,
-                            });
-                            setEditProjectIndex(index);
-                            setShowEditProjectModal(true);
-                          }}
-                        >
-                          ✏️
-                        </button>
-                        <button
-                          className="btn-delete"
-                          title="Eliminar proyecto"
-                          style={{
-                            background: "none",
-                            border: "none",
-                            cursor: "pointer",
-                            verticalAlign: "middle",
-                            marginLeft: 4,
-                            color: "#111"
-                          }}
-                          onClick={() => {
-                            setSelectedProjectIndex(index);
-                            setShowDeleteModal(true);
-                          }}
-                        >
-                          🗑️
-                        </button>
+                      {/* Acciones estilo premium */}
+                      <td>
+                        <div style={{ display: "flex", gap: "8px" }}>
+                          <button
+                            className="action-btn view-btn"
+                            title="Ver detalles"
+                            onClick={() => {
+                              setDetailProject(proyecto);
+                              setShowDetailModal(true);
+                            }}
+                          >
+                            Ver
+                          </button>
+                          <button
+                            className="action-btn edit-btn"
+                            title="Editar proyecto"
+                            onClick={() => {
+                              setEditProjectData({
+                                nombre: proyecto.nombre,
+                                importancia: proyecto.importancia,
+                                fechaInicio: proyecto.fechaInicio,
+                                fechaLimite: proyecto.fechaLimite,
+                              });
+                              setEditProjectIndex(index);
+                              setShowEditProjectModal(true);
+                            }}
+                          >
+                            Editar
+                          </button>
+                          <button
+                            className="action-btn delete-btn"
+                            title="Eliminar proyecto"
+                            onClick={() => {
+                              setSelectedProjectIndex(index);
+                              setShowDeleteModal(true);
+                            }}
+                          >
+                            Eliminar
+                          </button>
+                        </div>
                       </td>
                       <td>
                         {proyecto.tareas && proyecto.tareas.length > 0 ? (
