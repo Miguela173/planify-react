@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { FiEye } from "react-icons/fi"
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import "./PlanesPage.css"
@@ -103,7 +104,7 @@ const PlanesPage = () => {
                   ))}
                 </ul>
                 <button
-                  onClick={() => handlePlanSelection(plan.nombre.toLowerCase())}
+                  onClick={() => handlePlanSelection(plan.name.toLowerCase())}
                   className={`plan-button ${plan.name.toLowerCase()}-button`}
                 >
                   ¡Adquiérelo ahora!

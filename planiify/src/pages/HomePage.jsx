@@ -51,95 +51,14 @@ const HomePage = () => {
 
   const handlePremiumAccess = (e) => {
     e.preventDefault()
-    // Cambia estas credenciales por las que desees
-    if (adminUser === "admin" && adminPass === "1234") {
-      // acceso permitido
-      setShowPremiumModal(false)
-      setLoginError("")
-      navigate("/welcome")
-    } else {
-      setLoginError("Credenciales incorrectas")
-    }
+    setShowPremiumModal(false)
+    setLoginError("")
+    navigate("/welcome")
   }
 
   return (
     <div className="page-container">
       <Navbar />
-
-      {/* Botón premium flotante */}
-      <button
-        className="btn-premium"
-        style={{
-          position: "fixed",
-          top: 20,
-          right: 20,
-          zIndex: 1000,
-          padding: "6px 14px",
-          fontSize: "0.95em",
-          borderRadius: "16px",
-          background: "#ffd700",
-          color: "#222",
-          border: "none",
-          cursor: "pointer",
-          fontWeight: "bold",
-          boxShadow: "0 2px 8px #0001"
-        }}
-        onClick={() => setShowPremiumModal(true)}
-      >
-        Premium
-      </button>
-
-      {/* Modal de acceso premium */}
-      {showPremiumModal && (
-        <div className="modal-overlay">
-          <div className="modal-content" style={{ maxWidth: 340 }}>
-            <h3>Acceso Admin</h3>
-            <form onSubmit={handlePremiumAccess}>
-              <div className="modal-form-group">
-                <label>Usuario</label>
-                <input
-                  type="text"
-                  value={adminUser}
-                  onChange={e => setAdminUser(e.target.value)}
-                  className="modal-input"
-                  autoFocus
-                  required
-                />
-              </div>
-              <div className="modal-form-group">
-                <label>Contraseña</label>
-                <input
-                  type="password"
-                  value={adminPass}
-                  onChange={e => setAdminPass(e.target.value)}
-                  className="modal-input"
-                  required
-                />
-              </div>
-              {loginError && (
-                <div style={{ color: "#dc2626", marginBottom: 8, fontSize: "0.95em" }}>
-                  {loginError}
-                </div>
-              )}
-              <div className="modal-buttons" style={{ marginTop: 10 }}>
-                <button type="submit" className="btn-assign-modal">
-                  Acceder
-                </button>
-                <button
-                  type="button"
-                  className="btn-cancel"
-                  onClick={() => {
-                    setShowPremiumModal(false)
-                    setLoginError("")
-                  }}
-                >
-                  Cancelar
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
       <main>
         <div className="main-container">
@@ -171,7 +90,7 @@ const HomePage = () => {
                     <th>Nombre del Proyecto</th>
                     <th>Fecha de Inicio</th>
                     <th>Fecha de Vencimiento</th>
-                    <th>Tareas</th> {/* Cambiado de Importancia a Tareas */}
+                    <th>Tareas</th>
                     <th>Acciones</th>
                   </tr>
                 </thead>

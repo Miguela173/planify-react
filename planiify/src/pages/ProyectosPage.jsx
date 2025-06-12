@@ -47,10 +47,39 @@ const ProyectosPage = () => {
   const [detailProject, setDetailProject] = useState(null);
   const navigate = useNavigate()
 
+  // Cambia la URL base según tu backend
+  const API_URL = "http://localhost:8081";
+
+  // Obtener proyectos al cargar
   useEffect(() => {
-    const proyectosGuardados = JSON.parse(localStorage.getItem("proyectos") || "[]")
-    setProyectos(proyectosGuardados)
-  }, [])
+    const fetchProyectos = async () => {
+      try {
+        const token = localStorage.getItem("accessToken");
+        const response = await fetch(`${API_URL}/projects`, {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          // Mapea los campos del backend a los del frontend
+          const proyectosMapeados = data.map(p => ({
+            id: p.id,
+            nombre: p.name,
+            descripcion: p.description,
+            fechaInicio: p.createdAt ? p.createdAt.split("T")[0] : "",
+            fechaLimite: "", // Si tu API no lo trae, déjalo vacío o agrega lógica si tienes un campo equivalente
+            importancia: "", // Si tu API no lo trae, déjalo vacío o agrega lógica si tienes un campo equivalente
+            tareas: p.tareas || [],
+          }));
+          setProyectos(proyectosMapeados);
+        } else {
+          setProyectos([]);
+        }
+      } catch (error) {
+        setProyectos([]);
+      }
+    };
+    fetchProyectos();
+  }, []);
 
   const handleInputChange = (e) => {
     setFormData({
@@ -66,9 +95,9 @@ const ProyectosPage = () => {
     })
   }
 
-  const handleSubmit = (e) => {
+  // Crear proyecto
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     const nuevoProyecto = {
       nombre: formData.nombre,
       importancia: formData.importancia,
@@ -76,73 +105,168 @@ const ProyectosPage = () => {
       fechaLimite: formData.fechaLimite,
       tareas: [],
     };
-
-    const nuevosProyectos = [...proyectos, nuevoProyecto];
-    setProyectos(nuevosProyectos);
-    localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos));
-
-    // Guardar la fecha y la importancia en localStorage para el calendario
-    const fechasCalendario = JSON.parse(localStorage.getItem("fechasCalendario") || "[]");
-    fechasCalendario.push({
-      fecha: formData.fechaLimite,
-      importancia: formData.importancia,
-    });
-    localStorage.setItem("fechasCalendario", JSON.stringify(fechasCalendario));
-
-    // Limpiar el formulario
-    setFormData({
-      nombre: "",
-      fechaInicio: "",
-      fechaLimite: "",
-      importancia: "",
-    });
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await fetch(`${API_URL}/projects`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(nuevoProyecto),
+      });
+      if (response.ok) {
+        const proyectoCreado = await response.json();
+        setProyectos([...proyectos, proyectoCreado]);
+        setFormData({
+          nombre: "",
+          fechaInicio: "",
+          fechaLimite: "",
+          importancia: "",
+        });
+      }
+    } catch (error) {
+      // Manejo de error
+    }
   }
 
-  const handleDeleteProject = (index) => {
-    const nuevosProyectos = [...proyectos];
-    const proyectoEliminado = nuevosProyectos.splice(index, 1); // Eliminar el proyecto del estado
-
-    setProyectos(nuevosProyectos);
-    localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos));
-
-    // Eliminar la fecha del calendario asociada al proyecto eliminado
-    const fechasCalendario = JSON.parse(localStorage.getItem("fechasCalendario") || "[]");
-    const nuevasFechasCalendario = fechasCalendario.filter(
-      (fecha) => fecha.nombre !== proyectoEliminado[0].nombre
-    );
-    localStorage.setItem("fechasCalendario", JSON.stringify(nuevasFechasCalendario));
-
-    // Cierra el modal y limpia el índice seleccionado
-    setShowDeleteModal(false);
-    setSelectedProjectIndex(null);
-  };
+  // Eliminar proyecto
+  const handleDeleteProject = async (index) => {
+    const proyecto = proyectos[index];
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await fetch(`${API_URL}/projects/${proyecto.id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const nuevosProyectos = proyectos.filter((_, i) => i !== index);
+        setProyectos(nuevosProyectos);
+        setShowDeleteModal(false);
+        setSelectedProjectIndex(null);
+      }
+    } catch (error) {
+      // Manejo de error
+    }
+  }
 
   const asignarTarea = (projectIndex) => {
     setSelectedProjectIndex(projectIndex)
     setShowModal(true)
   }
 
-  const handleTareaSubmit = (e) => {
-    e.preventDefault()
+  // Asignar tarea a proyecto
+  const handleTareaSubmit = async (e) => {
+    e.preventDefault();
     if (selectedProjectIndex !== null) {
-      const nuevosProyectos = [...proyectos]
-      if (!nuevosProyectos[selectedProjectIndex].tareas) {
-        nuevosProyectos[selectedProjectIndex].tareas = []
+      const proyecto = proyectos[selectedProjectIndex];
+      try {
+        const token = localStorage.getItem("accessToken");
+        const response = await fetch(`http://localhost:8081/api/task`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            title: tareaData.nombre,
+            description: tareaData.descripcion || tareaData.nombre,
+            project: proyecto.id,
+            assigned: tareaData.asignado,
+            state: tareaData.estado === "Completada" ? "2" : "1",
+          }),
+        });
+        if (response.ok) {
+          const tareaCreada = await response.json();
+          const nuevaTarea = {
+            id: tareaCreada.id,
+            nombre: tareaCreada.title,
+            descripcion: tareaCreada.description,
+            asignado: tareaCreada.assigned,
+            estado: tareaCreada.state === "2" ? "Completada" : "Pendiente",
+            fechaLimite: tareaData.fechaLimite, // Si tu backend no la devuelve, usa la del form
+          };
+          const nuevosProyectos = [...proyectos];
+          if (!nuevosProyectos[selectedProjectIndex].tareas) {
+            nuevosProyectos[selectedProjectIndex].tareas = [];
+          }
+          nuevosProyectos[selectedProjectIndex].tareas.push(nuevaTarea);
+          setProyectos(nuevosProyectos);
+          setTareaData({
+            nombre: "",
+            asignado: "",
+            fechaLimite: "",
+            estado: "Pendiente",
+          });
+          setShowModal(false);
+          setSelectedProjectIndex(null);
+        }
+      } catch (error) {
+        // Manejo de error
       }
-      nuevosProyectos[selectedProjectIndex].tareas.push(tareaData)
-      setProyectos(nuevosProyectos)
-      localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos))
-
-      setTareaData({
-        nombre: "",
-        asignado: "",
-        fechaLimite: "",
-        estado: "Pendiente",
-      })
-      setShowModal(false)
-      setSelectedProjectIndex(null)
     }
   }
+
+  // Eliminar tarea
+  const handleDeleteTask = async (projectIdx, taskIdx) => {
+    const tarea = proyectos[projectIdx].tareas[taskIdx];
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await fetch(`http://localhost:8081/api/task/${tarea.id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const nuevosProyectos = [...proyectos];
+        nuevosProyectos[projectIdx].tareas.splice(taskIdx, 1);
+        setProyectos(nuevosProyectos);
+      }
+    } catch (error) {
+      // Manejo de error
+    }
+  }
+
+  // Editar tarea
+  const handleEditTaskSubmit = async (e) => {
+    e.preventDefault();
+    if (editTaskIndex.projectIdx !== null && editTaskIndex.taskIdx !== null) {
+      const tarea = proyectos[editTaskIndex.projectIdx].tareas[editTaskIndex.taskIdx];
+      try {
+        const token = localStorage.getItem("accessToken");
+        const response = await fetch(`http://localhost:8081/api/task/${tarea.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            title: editTaskData.nombre,
+            description: editTaskData.descripcion || editTaskData.nombre,
+            project: proyectos[editTaskIndex.projectIdx].id,
+            assigned: editTaskData.asignado,
+            state: editTaskData.estado === "Completada" ? "2" : "1",
+          }),
+        });
+        if (response.ok) {
+          const tareaActualizada = await response.json();
+          const nuevosProyectos = [...proyectos];
+          nuevosProyectos[editTaskIndex.projectIdx].tareas[editTaskIndex.taskIdx] = {
+            id: tareaActualizada.id,
+            nombre: tareaActualizada.title,
+            descripcion: tareaActualizada.description,
+            asignado: tareaActualizada.assigned,
+            estado: tareaActualizada.state === "2" ? "Completada" : "Pendiente",
+            fechaLimite: editTaskData.fechaLimite,
+          };
+          setProyectos(nuevosProyectos);
+          setShowEditTaskModal(false);
+          setEditTaskIndex({ projectIdx: null, taskIdx: null });
+        }
+      } catch (error) {
+        // Manejo de error
+      }
+    }
+  };
 
   const closeModal = () => {
     setShowLimitModal(false)
@@ -151,20 +275,6 @@ const ProyectosPage = () => {
   const handleNavigateToPlans = () => {
     navigate("/planes")
   }
-
-  const handleDeleteTask = (projectIdx, taskIdx) => {
-    const nuevosProyectos = [...proyectos];
-    nuevosProyectos[projectIdx].tareas.splice(taskIdx, 1);
-    setProyectos(nuevosProyectos);
-    localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos));
-  };
-
-  const handleCompleteTask = (projectIdx, taskIdx) => {
-    const nuevosProyectos = [...proyectos];
-    nuevosProyectos[projectIdx].tareas[taskIdx].estado = "Completada";
-    setProyectos(nuevosProyectos);
-    localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos));
-  };
 
   return (
     <div className="page-container">
@@ -271,9 +381,10 @@ const ProyectosPage = () => {
                       <td>{proyecto.fechaInicio}</td>
                       <td>{proyecto.fechaLimite}</td>
                       <td>
-                        <span className={`priority-badge priority-${proyecto.importancia?.toLowerCase()}`}>
-                          {proyecto.importancia}
-                        </span>
+                        {proyecto.importancia
+                          ? <span className={`priority-badge priority-${proyecto.importancia?.toLowerCase()}`}>{proyecto.importancia}</span>
+                          : <span style={{ color: "#888" }}>-</span>
+                        }
                       </td>
                       {/* Acciones estilo premium */}
                       <td>
@@ -505,19 +616,7 @@ const ProyectosPage = () => {
           <div className="modal-overlay">
             <div className="modal-content">
               <h2>Editar Tarea</h2>
-              <form
-                onSubmit={e => {
-                  e.preventDefault();
-                  if (editTaskIndex.projectIdx !== null && editTaskIndex.taskIdx !== null) {
-                    const nuevosProyectos = [...proyectos];
-                    nuevosProyectos[editTaskIndex.projectIdx].tareas[editTaskIndex.taskIdx] = { ...editTaskData };
-                    setProyectos(nuevosProyectos);
-                    localStorage.setItem("proyectos", JSON.stringify(nuevosProyectos));
-                    setShowEditTaskModal(false);
-                    setEditTaskIndex({ projectIdx: null, taskIdx: null });
-                  }
-                }}
-              >
+              <form onSubmit={handleEditTaskSubmit}>
                 <div className="modal-form-group">
                   <label>Nombre de la tarea</label>
                   <input
